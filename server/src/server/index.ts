@@ -68,6 +68,14 @@ export default class MonitorServer {
     this.standardMiddleware(this.app);
     this.startServer();
   }
+  async close(): Promise<void> {
+    await new Promise<void>((resolve, reject) => {
+      this.httpServer.close((err) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+  }
 
   private standardMiddleware(app: Express): void {
     app.set("trust proxy", 1);
