@@ -1,4 +1,5 @@
 # Thunder Web
+<img width="1920" alt="Cover" src="https://github.com/user-attachments/assets/a2feb1ac-f26c-4316-b774-937eca478dbe">
 
 ## 프로젝트 개요
 
