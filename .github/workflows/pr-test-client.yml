@@ -20,14 +20,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "pnpm"
 
       - name: Install Client dependencies
+        working-directory: ./client
         run: |
-          cd client
           pnpm install
 
       - name: Run tests
+        working-directory: ./client
         run: |
-          cd client
           pnpm run test
