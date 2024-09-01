@@ -16,7 +16,7 @@ export default function DashboardLayout({
       />
       <div className="flex h-full">
         <LeftSidebar />
-        <div className="w-[calc(100%-16.5rem)]">{children}</div>
+        <div className="w-[calc(100%-16.5rem)] py-5 px-6">{children}</div>
       </div>
     </main>
   );

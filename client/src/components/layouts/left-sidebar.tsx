@@ -3,7 +3,7 @@ import { LeftSidebarList } from "./left-sidebar-list";
 
 export function LeftSidebar() {
   return (
-    <div className="w-[16.5rem] h-full py-9 px-5 flex flex-col items-center shadow-2xl">
+    <div className="w-[16.5rem] bg-main-grad h-full py-9 px-5 flex flex-col items-center shadow-2xl">
       <div className="text-xl uppercase flex items-center gap-3">
         <h1 className="text-white">THUNDER</h1>
         <div className="flex items-center">
