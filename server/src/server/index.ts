@@ -1,4 +1,6 @@
-import { ApolloServer } from "@apollo/server";
+import { margedGraphQLSchema } from "@/graphql/schemas";
+import { AppContextType } from "@/types/common.type";
+import { ApolloServer, BaseContext } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/disabled";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
@@ -25,15 +27,6 @@ import {
 } from "./config";
 import logger from "./log";
 
-const typeDefs = `#graphql
-  type User {
-    username: String
-  }
-  type Query {
-    user: User
-  }
-`;
-
 const resolvers = {
   Query: {
     user() {
@@ -50,8 +43,11 @@ export default class MonitorServer {
   constructor(app: Express) {
     this.app = app;
     this.httpServer = new http.Server(app);
-    const schema: GraphQLSchema = makeExecutableSchema({ typeDefs, resolvers });
-    this.server = new ApolloServer({
+    const schema: GraphQLSchema = makeExecutableSchema({
+      typeDefs: margedGraphQLSchema,
+      resolvers,
+    });
+    this.server = new ApolloServer<AppContextType | BaseContext>({
       schema,
       introspection: NODE_ENV !== "production",
       plugins: [
