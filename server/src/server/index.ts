@@ -1,3 +1,4 @@
+import { userResolver } from "@/graphql/resolvers/user.resolver";
 import { margedGraphQLSchema } from "@/graphql/schemas";
 import { AppContextType } from "@/types/common.type";
 import { ApolloServer, BaseContext } from "@apollo/server";
@@ -27,14 +28,6 @@ import {
 } from "./config";
 import logger from "./log";
 
-const resolvers = {
-  Query: {
-    user() {
-      return { username: "Qwer" };
-    },
-  },
-};
-
 export default class MonitorServer {
   private app: Express;
   private httpServer: http.Server;
@@ -45,7 +38,7 @@ export default class MonitorServer {
     this.httpServer = new http.Server(app);
     const schema: GraphQLSchema = makeExecutableSchema({
       typeDefs: margedGraphQLSchema,
-      resolvers,
+      resolvers: userResolver,
     });
     this.server = new ApolloServer<AppContextType | BaseContext>({
       schema,

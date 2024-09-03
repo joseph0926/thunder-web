@@ -1,18 +1,12 @@
 import { buildSchema } from "graphql";
 
 export const userSchema = buildSchema(`#graphql
-  input Auth {
-      username: String
-      email: String
-      password: String
-      socialId: String
-    } 
-
-  input NotificationResult {
-    id: String!
-    userId: String!
-    groupName: String!
-    emails: String!
+   input Auth {
+    username: String
+    email: String
+    password: String
+    socialId: String
+    type: String
   }
 
   type User {
@@ -25,7 +19,6 @@ export const userSchema = buildSchema(`#graphql
 
   type AuthResponse {
     user: User!
-    notifications: [NotificationResult!]!
   }
 
   type AuthLogoutResponse {
@@ -34,7 +27,6 @@ export const userSchema = buildSchema(`#graphql
 
   type CurrentUserResponse {
     user: User
-    notifications: [NotificationResult]
   }
 
   type Query {
