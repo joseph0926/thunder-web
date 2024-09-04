@@ -28,7 +28,7 @@ model Notification {
   createdAt DateTime @default(now())
 
   groupName String
-  emails    String?
+  emails    String
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
