@@ -1,5 +1,5 @@
-import { userResolver } from "@/graphql/resolvers/user.resolver";
-import { margedGraphQLSchema } from "@/graphql/schemas";
+import { resolvers } from "@/graphql/resolvers";
+import { mergedGraphQLSchema } from "@/graphql/schemas";
 import { AppContextType } from "@/types/common.type";
 import { ApolloServer, BaseContext } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
@@ -37,8 +37,8 @@ export default class MonitorServer {
     this.app = app;
     this.httpServer = new http.Server(app);
     const schema: GraphQLSchema = makeExecutableSchema({
-      typeDefs: margedGraphQLSchema,
-      resolvers: userResolver,
+      typeDefs: mergedGraphQLSchema,
+      resolvers,
     });
     this.server = new ApolloServer<AppContextType | BaseContext>({
       schema,
