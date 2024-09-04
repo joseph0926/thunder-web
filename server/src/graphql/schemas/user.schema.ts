@@ -17,8 +17,16 @@ export const userSchema = buildSchema(`#graphql
     googleId: String
   }
 
+  type NotificationResult {
+    id: ID!
+    userId: String!
+    groupName: String!
+    emails: String!
+  }
+
   type AuthResponse {
     user: User!
+    notifications: [NotificationResult!]!
   }
 
   type AuthLogoutResponse {
@@ -27,6 +35,7 @@ export const userSchema = buildSchema(`#graphql
 
   type CurrentUserResponse {
     user: User
+    notifications: [NotificationResult!]!
   }
 
   type Query {
