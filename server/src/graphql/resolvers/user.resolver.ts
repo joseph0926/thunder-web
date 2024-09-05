@@ -88,6 +88,7 @@ async function useReturnValue(req: Request, result: UserType, type: string) {
     id: result.id,
     email: result.email,
     username: result.username,
+    createdAt: result.createdAt,
   } as UserType;
 
   return {
