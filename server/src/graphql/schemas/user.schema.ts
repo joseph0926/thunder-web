@@ -13,7 +13,7 @@ export const userSchema = buildSchema(`#graphql
     id: String
     email: String
     username: String
-    createAt: String
+    createdAt: String
     googleId: String
   }
 
