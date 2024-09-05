@@ -5,11 +5,14 @@ import {
 } from "@/services/notification.service";
 import {
   createNewUser,
+  getUserByProp,
   getUserByUsernameOrEmail,
 } from "@/services/user.service";
 import { AppContextType } from "@/types/common.type";
 import { NotificationType } from "@/types/notification.type";
 import { UserType } from "@/types/user.type";
+import { isEmail } from "@/utils/email.util";
+import { comparePassword } from "@/utils/password.util";
 import { Request } from "express";
 import { GraphQLError } from "graphql";
 import { sign } from "jsonwebtoken";
@@ -45,13 +48,42 @@ export const UserResolver = {
         throw new GraphQLError("회원가입에 실패하였습니다.");
       }
 
-      const response = await useReturnValue(req, result, "register");
+      const response = await userReturnValue(req, result, "register");
+      return response;
+    },
+
+    async loginUser(
+      _: undefined,
+      args: { username: string; password: string },
+      contextValue: AppContextType
+    ) {
+      const { req } = contextValue;
+      const { username, password } = args;
+
+      const isValidEmail = isEmail(username);
+      const type = isValidEmail ? "email" : "username";
+
+      const existingUser = await getUserByProp(username, type);
+      if (!existingUser || !existingUser.data) {
+        throw new GraphQLError("해당 정보로 가입된 정보가 존재하지 않습니다.");
+      }
+
+      const isPasswordMatched = await comparePassword(
+        password,
+        existingUser.data.password!
+      );
+      if (!isPasswordMatched) {
+        // TODO: 비밀번호 불일치라는 구체적인 이유를 제시해야할까?
+        throw new GraphQLError("비밀번호가 일치하지 않습니다.");
+      }
+
+      const response = await userReturnValue(req, existingUser.data, "login");
       return response;
     },
   },
 };
 
-async function useReturnValue(req: Request, result: UserType, type: string) {
+async function userReturnValue(req: Request, result: UserType, type: string) {
   let notifications: NotificationType[] = [];
   if (type === "register" && result && result.id && result.email) {
     const { data: notification } = await createNotificationGroup({

@@ -90,3 +90,33 @@ export const getUserBySocialId = async (
     };
   }
 };
+
+export async function getUserByProp(
+  prop: string,
+  type: string
+): Promise<ResponseType<UserType | undefined>> {
+  try {
+    const user = (await db.user.findFirst({
+      where: {
+        ...(type === "username" && {
+          username: upperFirst(prop),
+        }),
+        ...(type === "email" && {
+          email: toLower(prop),
+        }),
+      },
+    })) as unknown as UserType | undefined;
+    return {
+      data: user,
+      message: "유저 정보를 불러왔습니다.",
+      success: true,
+    };
+  } catch (error) {
+    log.error(error);
+    return {
+      data: null,
+      message: "유저 정보를 불러오는데 실패하였습니다.",
+      success: false,
+    };
+  }
+}
