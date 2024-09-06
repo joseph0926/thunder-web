@@ -1,4 +1,5 @@
 import { JWT_TOKEN } from "@/server/config";
+import log from "@/server/log";
 import {
   createNotificationGroup,
   getAllNotificationGroups,
@@ -11,6 +12,7 @@ import {
 import { AppContextType } from "@/types/common.type";
 import { NotificationType } from "@/types/notification.type";
 import { UserType } from "@/types/user.type";
+import { authenticateGroupQLRoute } from "@/utils/checkSession.util";
 import { isEmail } from "@/utils/email.util";
 import { comparePassword } from "@/utils/password.util";
 import { Request } from "express";
@@ -19,6 +21,30 @@ import { sign } from "jsonwebtoken";
 import { toLower, upperFirst } from "lodash";
 
 export const UserResolver = {
+  Query: {
+    async checkCurrentUser(
+      _: undefined,
+      __: undefined,
+      contextValue: AppContextType
+    ) {
+      const { req } = contextValue;
+      authenticateGroupQLRoute(req);
+      // TODO: 임시 확인용 제거 필요
+      log.info(req.currentUser);
+
+      const notifications = await getAllNotificationGroups(req.currentUser!.id);
+
+      return {
+        user: {
+          id: req.currentUser?.id,
+          username: req.currentUser?.username,
+          email: req.currentUser?.email,
+          createdAt: new Date(),
+        },
+        notifications,
+      };
+    },
+  },
   Mutation: {
     async registerUser(
       _: undefined,
@@ -79,6 +105,13 @@ export const UserResolver = {
 
       const response = await userReturnValue(req, existingUser.data, "login");
       return response;
+    },
+
+    logout(_: undefined, __: undefined, contextValue: AppContextType) {
+      const { req } = contextValue;
+      req.session = null;
+      req.currentUser = undefined;
+      return null;
     },
   },
 };

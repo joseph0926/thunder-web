@@ -45,6 +45,7 @@ export const userSchema = buildSchema(`#graphql
   type Mutation {
     loginUser(username: String!, password: String!): AuthResponse!
     registerUser(user: Auth!): AuthResponse!
+    # TODO: 소셜 로그인 관련 resolver 정의 필요!
     authSocialUser(user: Auth!): AuthResponse!
     logout: AuthLogoutResponse
   }
