@@ -1,14 +1,11 @@
-import { cn } from "@/lib/utils";
-import { ComponentProps } from "react";
+import { cn } from '@/lib/utils';
+import { ComponentProps } from 'react';
 
-type CardProps = ComponentProps<"div">;
+type CardProps = ComponentProps<'div'>;
 
 export function Card({ children, className, ...props }: CardProps) {
   return (
-    <div
-      className={cn("bg-main-grad p-5 rounded-[20px]", className)}
-      {...props}
-    >
+    <div className={cn('bg-main-grad rounded-[20px] p-5', className)} {...props}>
       {children}
     </div>
   );
