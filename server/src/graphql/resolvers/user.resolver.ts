@@ -59,7 +59,7 @@ export const UserResolver = {
         username!,
         email!
       );
-      if (existingUser) {
+      if (existingUser && existingUser.id) {
         throw new GraphQLError("이미 가입된 정보가 존재합니다.");
       }
 
