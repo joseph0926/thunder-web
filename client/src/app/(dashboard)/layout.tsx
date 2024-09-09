@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="relative h-full w-full">
+    <main className="relative h-full w-full overflow-hidden">
       <Image src="/bg.png" alt="bg" fill className="absolute left-0 top-0 -z-10 scale-110" />
       <div className="flex h-full">
         <LeftSidebar />
